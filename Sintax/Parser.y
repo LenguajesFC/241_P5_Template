@@ -57,15 +57,18 @@ import Data.Map
       Int                  { TokenTInt }
       Float                { TokenTFloat }
       Bool                 { TokenTBool }
+      pot                  { TokenPot }
+      sqrt                 { TokenSqrt }
 
 %left else
-%right '->' '['
+%right '->'
 %left '||'
 %left '&&'
 %nonassoc '==' '>' '<' '>=' '<='
 %left '+' '-'
 %left '*' '/' '%'
-%left not NEG fst snd
+%left not NEG fst snd pot sqrt
+%left '['
 
 %%
 
@@ -89,12 +92,14 @@ E    : num                         { Int $1 }
 
      | not E                       { UnaryOp Not $2 }
      | '-' E %prec NEG             { UnaryOp Negate $2 }
+     | pot E                       { UnaryOp Pot $2 }
+     | sqrt E                      { UnaryOp Sqrt $2 }
      
      | '(' E ')'                   { $2 }
      | '(' E E ')'                 { App $2 $3 }
      | if E then E else E          { If $2 $4 $6 }
      | let var '=' E in E end      { Let $2 $4 $6 }
-     | lam var '->' E              { Lambda $2 $4 }
+     | lam var ':' T '->' E        { Lambda $2 $4 $6 }
 
      | '('E ',' E')'               { Pair $2 $4 }
      | fst E                       { Fst $2 }
@@ -120,6 +125,7 @@ T    : Bool                { TBool }
      | T '->' T            { TFunc $1 $3 }
      | T '*' T             { TProd $1 $3 }
      | T '+' T             { TSum $1 $3 }
+     | '('T','T')'         { TPair $2 $4 }
      | '{' reglistT '}'    { TRecord $2 }
      | '(' T ')'           { $2 }
 {

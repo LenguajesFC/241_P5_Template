@@ -11,7 +11,7 @@ data Expr
   | App Expr Expr
   | If Expr Expr Expr
   | Let String Expr Expr
-  | Lambda String Expr
+  | Lambda String Type Expr
   | Record [(String, Expr)]
   | Prj String Expr
   | Pair Expr Expr
@@ -22,7 +22,7 @@ data Expr
   | Case Expr String Expr String Expr
   deriving (Show, Eq)
 
-data UnaryOp = Negate | Not deriving (Show, Eq)
+data UnaryOp = Negate | Not | Pot | Sqrt deriving (Show, Eq)
 
 data Op
   = ArithOp ArithOp

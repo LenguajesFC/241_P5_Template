@@ -58,7 +58,10 @@ data Token
       | TokenTNat 
       | TokenTInt 
       | TokenTFloat 
-      | TokenTBool 
+      | TokenTBool
+      -- Potencia y raiz
+      | TokenPot
+      | TokenSqrt
       -- Error
       | Error Char
       deriving Show
@@ -120,13 +123,16 @@ lexVar cs = case span isAlpha cs of
       ("end",cs') -> TokenEnd : lexer cs'
       ("lam",cs') -> TokenLam : lexer cs'
 
-      ("fts",cs') -> TokenFst : lexer cs'
+      ("fst",cs') -> TokenFst : lexer cs'
       ("snd",cs') -> TokenSnd : lexer cs'
 
       ("inr",cs') -> TokenInr : lexer cs'
       ("inl",cs') -> TokenInL : lexer cs'
       ("case",cs') -> TokenCase : lexer cs'
       ("of",cs') -> TokenOf : lexer cs'
+
+      ("pot",cs') -> TokenPot : lexer cs'
+      ("sqrt", cs') -> TokenSqrt : lexer cs'
       
       ("True",cs') -> TokenBool True: lexer cs'
       ("False",cs') -> TokenBool False : lexer cs'

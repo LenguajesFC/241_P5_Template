@@ -9,5 +9,6 @@ data Type
   | TFunc Type Type
   | TProd Type Type
   | TSum Type Type
+  | TPair Type Type
   | TRecord [(String, Type)]
   deriving (Show,Eq)
