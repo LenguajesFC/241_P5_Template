@@ -125,7 +125,6 @@ T    : Bool                { TBool }
      | T '->' T            { TFunc $1 $3 }
      | T '*' T             { TProd $1 $3 }
      | T '+' T             { TSum $1 $3 }
-     | '('T','T')'         { TPair $2 $4 }
      | '{' reglistT '}'    { TRecord $2 }
      | '(' T ')'           { $2 }
 {
