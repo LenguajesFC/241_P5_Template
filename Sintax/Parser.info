@@ -31,7 +31,7 @@ Grammar
 	E -> '(' E E ')'                                   (22)
 	E -> if E then E else E                            (23)
 	E -> let var '=' E in E end                        (24)
-	E -> lam var ':' T '->' E                          (25)
+	E -> lam '(' var ':' T ')' ':' T '->' E            (25)
 	E -> '(' E ',' E ')'                               (26)
 	E -> fst E                                         (27)
 	E -> snd E                                         (28)
@@ -481,9 +481,9 @@ State 11
 
 State 12
 
-	E -> lam . var ':' T '->' E                         (rule 25)
+	E -> lam . '(' var ':' T ')' ':' T '->' E           (rule 25)
 
-	var            shift, and enter state 31
+	'('            shift, and enter state 31
 
 
 State 13
@@ -953,9 +953,9 @@ State 30
 
 State 31
 
-	E -> lam var . ':' T '->' E                         (rule 25)
+	E -> lam '(' . var ':' T ')' ':' T '->' E           (rule 25)
 
-	':'            shift, and enter state 69
+	var            shift, and enter state 69
 
 
 State 32
@@ -2374,15 +2374,10 @@ State 68
 
 State 69
 
-	E -> lam var ':' . T '->' E                         (rule 25)
+	E -> lam '(' var . ':' T ')' ':' T '->' E           (rule 25)
 
-	'('            shift, and enter state 74
-	'{'            shift, and enter state 75
-	Int            shift, and enter state 76
-	Float          shift, and enter state 77
-	Bool           shift, and enter state 78
+	':'            shift, and enter state 93
 
-	T              goto state 93
 
 State 70
 
@@ -2730,15 +2725,15 @@ State 92
 
 State 93
 
-	E -> lam var ':' T . '->' E                         (rule 25)
-	T -> T . '->' T                                     (rule 43)
-	T -> T . '*' T                                      (rule 44)
-	T -> T . '+' T                                      (rule 45)
+	E -> lam '(' var ':' . T ')' ':' T '->' E           (rule 25)
 
-	'+'            shift, and enter state 83
-	'*'            shift, and enter state 84
-	'->'           shift, and enter state 103
+	'('            shift, and enter state 74
+	'{'            shift, and enter state 75
+	Int            shift, and enter state 76
+	Float          shift, and enter state 77
+	Bool           shift, and enter state 78
 
+	T              goto state 103
 
 State 94
 
@@ -3052,7 +3047,7 @@ State 101
 	pot            shift, and enter state 19
 	sqrt           shift, and enter state 20
 
-	E              goto state 123
+	E              goto state 121
 
 State 102
 
@@ -3077,37 +3072,20 @@ State 102
 	pot            shift, and enter state 19
 	sqrt           shift, and enter state 20
 
-	E              goto state 122
+	E              goto state 120
 
 State 103
 
-	E -> lam var ':' T '->' . E                         (rule 25)
-	T -> T '->' . T                                     (rule 43)
+	E -> lam '(' var ':' T . ')' ':' T '->' E           (rule 25)
+	T -> T . '->' T                                     (rule 43)
+	T -> T . '*' T                                      (rule 44)
+	T -> T . '+' T                                      (rule 45)
 
-	num            shift, and enter state 2
-	float          shift, and enter state 4
-	var            shift, and enter state 5
-	bool           shift, and enter state 6
-	'('            shift, and enter state 120
-	'-'            shift, and enter state 8
-	not            shift, and enter state 9
-	if             shift, and enter state 10
-	let            shift, and enter state 11
-	lam            shift, and enter state 12
-	'{'            shift, and enter state 121
-	fst            shift, and enter state 14
-	snd            shift, and enter state 15
-	inr            shift, and enter state 16
-	inl            shift, and enter state 17
-	case           shift, and enter state 18
-	Int            shift, and enter state 76
-	Float          shift, and enter state 77
-	Bool           shift, and enter state 78
-	pot            shift, and enter state 19
-	sqrt           shift, and enter state 20
+	')'            shift, and enter state 119
+	'+'            shift, and enter state 83
+	'*'            shift, and enter state 84
+	'->'           shift, and enter state 85
 
-	E              goto state 119
-	T              goto state 109
 
 State 104
 
@@ -3280,7 +3258,7 @@ State 114
 
 	E -> case E of '{' inl var . '=>' E '|' inr var '=>' E '}'    (rule 31)
 
-	'=>'           shift, and enter state 126
+	'=>'           shift, and enter state 124
 
 
 State 115
@@ -3399,108 +3377,12 @@ State 118
 
 State 119
 
-	E -> E . '+' E                                      (rule 5)
-	E -> E . '-' E                                      (rule 6)
-	E -> E . '*' E                                      (rule 7)
-	E -> E . '/' E                                      (rule 8)
-	E -> E . '%' E                                      (rule 9)
-	E -> E . '==' E                                     (rule 10)
-	E -> E . '>' E                                      (rule 11)
-	E -> E . '<' E                                      (rule 12)
-	E -> E . '>=' E                                     (rule 13)
-	E -> E . '<=' E                                     (rule 14)
-	E -> E . '&&' E                                     (rule 15)
-	E -> E . '||' E                                     (rule 16)
-	E -> lam var ':' T '->' E .                         (rule 25)
-	E -> E . '[' var ']'                                (rule 33)
+	E -> lam '(' var ':' T ')' . ':' T '->' E           (rule 25)
 
-	num            reduce using rule 25
-	float          reduce using rule 25
-	var            reduce using rule 25
-	bool           reduce using rule 25
-	'('            reduce using rule 25
-	')'            reduce using rule 25
-	'+'            shift, and enter state 37
-	'-'            shift, and enter state 38
-	'*'            shift, and enter state 39
-	'/'            shift, and enter state 40
-	'%'            shift, and enter state 41
-	'=='           shift, and enter state 42
-	'>'            shift, and enter state 43
-	'<'            shift, and enter state 44
-	'>='           shift, and enter state 45
-	'<='           shift, and enter state 46
-	'&&'           shift, and enter state 47
-	'||'           shift, and enter state 48
-	not            reduce using rule 25
-	if             reduce using rule 25
-	then           reduce using rule 25
-	else           reduce using rule 25
-	let            reduce using rule 25
-	in             reduce using rule 25
-	end            reduce using rule 25
-	lam            reduce using rule 25
-	'{'            reduce using rule 25
-	'}'            reduce using rule 25
-	','            reduce using rule 25
-	'['            shift, and enter state 49
-	fst            reduce using rule 25
-	snd            reduce using rule 25
-	inr            reduce using rule 25
-	inl            reduce using rule 25
-	case           reduce using rule 25
-	of             reduce using rule 25
-	'|'            reduce using rule 25
-	pot            reduce using rule 25
-	sqrt           reduce using rule 25
-	%eof           reduce using rule 25
+	':'            shift, and enter state 123
 
 
 State 120
-
-	E -> '(' . E ')'                                    (rule 21)
-	E -> '(' . E E ')'                                  (rule 22)
-	E -> '(' . E ',' E ')'                              (rule 26)
-	T -> '(' . T ')'                                    (rule 47)
-
-	num            shift, and enter state 2
-	float          shift, and enter state 4
-	var            shift, and enter state 5
-	bool           shift, and enter state 6
-	'('            shift, and enter state 120
-	'-'            shift, and enter state 8
-	not            shift, and enter state 9
-	if             shift, and enter state 10
-	let            shift, and enter state 11
-	lam            shift, and enter state 12
-	'{'            shift, and enter state 121
-	fst            shift, and enter state 14
-	snd            shift, and enter state 15
-	inr            shift, and enter state 16
-	inl            shift, and enter state 17
-	case           shift, and enter state 18
-	Int            shift, and enter state 76
-	Float          shift, and enter state 77
-	Bool           shift, and enter state 78
-	pot            shift, and enter state 19
-	sqrt           shift, and enter state 20
-
-	E              goto state 36
-	T              goto state 89
-
-State 121
-
-	E -> '{' . reglist '}'                              (rule 32)
-	T -> '{' . reglistT '}'                             (rule 46)
-
-	var            shift, and enter state 125
-
-	reglist        goto state 28
-	reg            goto state 29
-	reglistT       goto state 86
-	regT           goto state 87
-
-State 122
 
 	E -> E . '+' E                                      (rule 5)
 	E -> E . '-' E                                      (rule 6)
@@ -3529,11 +3411,11 @@ State 122
 	'<='           shift, and enter state 46
 	'&&'           shift, and enter state 47
 	'||'           shift, and enter state 48
-	end            shift, and enter state 124
+	end            shift, and enter state 122
 	'['            shift, and enter state 49
 
 
-State 123
+State 121
 
 	E -> E . '+' E                                      (rule 5)
 	E -> E . '-' E                                      (rule 6)
@@ -3592,7 +3474,7 @@ State 123
 	%eof           reduce using rule 23
 
 
-State 124
+State 122
 
 	E -> let var '=' E in E end .                       (rule 24)
 
@@ -3638,16 +3520,19 @@ State 124
 	%eof           reduce using rule 24
 
 
-State 125
+State 123
 
-	reg -> var . '=' E                                  (rule 36)
-	regT -> var . ':' T                                 (rule 39)
+	E -> lam '(' var ':' T ')' ':' . T '->' E           (rule 25)
 
-	'='            shift, and enter state 70
-	':'            shift, and enter state 106
+	'('            shift, and enter state 74
+	'{'            shift, and enter state 75
+	Int            shift, and enter state 76
+	Float          shift, and enter state 77
+	Bool           shift, and enter state 78
 
+	T              goto state 126
 
-State 126
+State 124
 
 	E -> case E of '{' inl var '=>' . E '|' inr var '=>' E '}'    (rule 31)
 
@@ -3670,9 +3555,9 @@ State 126
 	pot            shift, and enter state 19
 	sqrt           shift, and enter state 20
 
-	E              goto state 127
+	E              goto state 125
 
-State 127
+State 125
 
 	E -> E . '+' E                                      (rule 5)
 	E -> E . '-' E                                      (rule 6)
@@ -3705,6 +3590,48 @@ State 127
 	'|'            shift, and enter state 128
 
 
+State 126
+
+	E -> lam '(' var ':' T ')' ':' T . '->' E           (rule 25)
+	T -> T . '->' T                                     (rule 43)
+	T -> T . '*' T                                      (rule 44)
+	T -> T . '+' T                                      (rule 45)
+
+	'+'            shift, and enter state 83
+	'*'            shift, and enter state 84
+	'->'           shift, and enter state 127
+
+
+State 127
+
+	E -> lam '(' var ':' T ')' ':' T '->' . E           (rule 25)
+	T -> T '->' . T                                     (rule 43)
+
+	num            shift, and enter state 2
+	float          shift, and enter state 4
+	var            shift, and enter state 5
+	bool           shift, and enter state 6
+	'('            shift, and enter state 131
+	'-'            shift, and enter state 8
+	not            shift, and enter state 9
+	if             shift, and enter state 10
+	let            shift, and enter state 11
+	lam            shift, and enter state 12
+	'{'            shift, and enter state 132
+	fst            shift, and enter state 14
+	snd            shift, and enter state 15
+	inr            shift, and enter state 16
+	inl            shift, and enter state 17
+	case           shift, and enter state 18
+	Int            shift, and enter state 76
+	Float          shift, and enter state 77
+	Bool           shift, and enter state 78
+	pot            shift, and enter state 19
+	sqrt           shift, and enter state 20
+
+	E              goto state 130
+	T              goto state 109
+
 State 128
 
 	E -> case E of '{' inl var '=>' E '|' . inr var '=>' E '}'    (rule 31)
@@ -3716,17 +3643,129 @@ State 129
 
 	E -> case E of '{' inl var '=>' E '|' inr . var '=>' E '}'    (rule 31)
 
-	var            shift, and enter state 130
+	var            shift, and enter state 134
 
 
 State 130
 
-	E -> case E of '{' inl var '=>' E '|' inr var . '=>' E '}'    (rule 31)
+	E -> E . '+' E                                      (rule 5)
+	E -> E . '-' E                                      (rule 6)
+	E -> E . '*' E                                      (rule 7)
+	E -> E . '/' E                                      (rule 8)
+	E -> E . '%' E                                      (rule 9)
+	E -> E . '==' E                                     (rule 10)
+	E -> E . '>' E                                      (rule 11)
+	E -> E . '<' E                                      (rule 12)
+	E -> E . '>=' E                                     (rule 13)
+	E -> E . '<=' E                                     (rule 14)
+	E -> E . '&&' E                                     (rule 15)
+	E -> E . '||' E                                     (rule 16)
+	E -> lam '(' var ':' T ')' ':' T '->' E .           (rule 25)
+	E -> E . '[' var ']'                                (rule 33)
 
-	'=>'           shift, and enter state 131
+	num            reduce using rule 25
+	float          reduce using rule 25
+	var            reduce using rule 25
+	bool           reduce using rule 25
+	'('            reduce using rule 25
+	')'            reduce using rule 25
+	'+'            shift, and enter state 37
+	'-'            shift, and enter state 38
+	'*'            shift, and enter state 39
+	'/'            shift, and enter state 40
+	'%'            shift, and enter state 41
+	'=='           shift, and enter state 42
+	'>'            shift, and enter state 43
+	'<'            shift, and enter state 44
+	'>='           shift, and enter state 45
+	'<='           shift, and enter state 46
+	'&&'           shift, and enter state 47
+	'||'           shift, and enter state 48
+	not            reduce using rule 25
+	if             reduce using rule 25
+	then           reduce using rule 25
+	else           reduce using rule 25
+	let            reduce using rule 25
+	in             reduce using rule 25
+	end            reduce using rule 25
+	lam            reduce using rule 25
+	'{'            reduce using rule 25
+	'}'            reduce using rule 25
+	','            reduce using rule 25
+	'['            shift, and enter state 49
+	fst            reduce using rule 25
+	snd            reduce using rule 25
+	inr            reduce using rule 25
+	inl            reduce using rule 25
+	case           reduce using rule 25
+	of             reduce using rule 25
+	'|'            reduce using rule 25
+	pot            reduce using rule 25
+	sqrt           reduce using rule 25
+	%eof           reduce using rule 25
 
 
 State 131
+
+	E -> '(' . E ')'                                    (rule 21)
+	E -> '(' . E E ')'                                  (rule 22)
+	E -> '(' . E ',' E ')'                              (rule 26)
+	T -> '(' . T ')'                                    (rule 47)
+
+	num            shift, and enter state 2
+	float          shift, and enter state 4
+	var            shift, and enter state 5
+	bool           shift, and enter state 6
+	'('            shift, and enter state 131
+	'-'            shift, and enter state 8
+	not            shift, and enter state 9
+	if             shift, and enter state 10
+	let            shift, and enter state 11
+	lam            shift, and enter state 12
+	'{'            shift, and enter state 132
+	fst            shift, and enter state 14
+	snd            shift, and enter state 15
+	inr            shift, and enter state 16
+	inl            shift, and enter state 17
+	case           shift, and enter state 18
+	Int            shift, and enter state 76
+	Float          shift, and enter state 77
+	Bool           shift, and enter state 78
+	pot            shift, and enter state 19
+	sqrt           shift, and enter state 20
+
+	E              goto state 36
+	T              goto state 89
+
+State 132
+
+	E -> '{' . reglist '}'                              (rule 32)
+	T -> '{' . reglistT '}'                             (rule 46)
+
+	var            shift, and enter state 133
+
+	reglist        goto state 28
+	reg            goto state 29
+	reglistT       goto state 86
+	regT           goto state 87
+
+State 133
+
+	reg -> var . '=' E                                  (rule 36)
+	regT -> var . ':' T                                 (rule 39)
+
+	'='            shift, and enter state 70
+	':'            shift, and enter state 106
+
+
+State 134
+
+	E -> case E of '{' inl var '=>' E '|' inr var . '=>' E '}'    (rule 31)
+
+	'=>'           shift, and enter state 135
+
+
+State 135
 
 	E -> case E of '{' inl var '=>' E '|' inr var '=>' . E '}'    (rule 31)
 
@@ -3749,9 +3788,9 @@ State 131
 	pot            shift, and enter state 19
 	sqrt           shift, and enter state 20
 
-	E              goto state 132
+	E              goto state 136
 
-State 132
+State 136
 
 	E -> E . '+' E                                      (rule 5)
 	E -> E . '-' E                                      (rule 6)
@@ -3780,11 +3819,11 @@ State 132
 	'<='           shift, and enter state 46
 	'&&'           shift, and enter state 47
 	'||'           shift, and enter state 48
-	'}'            shift, and enter state 133
+	'}'            shift, and enter state 137
 	'['            shift, and enter state 49
 
 
-State 133
+State 137
 
 	E -> case E of '{' inl var '=>' E '|' inr var '=>' E '}' .    (rule 31)
 
@@ -3836,4 +3875,4 @@ Grammar Totals
 Number of rules: 48
 Number of terminals: 48
 Number of non-terminals: 7
-Number of states: 134
+Number of states: 138

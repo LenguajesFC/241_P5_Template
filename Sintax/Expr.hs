@@ -11,7 +11,7 @@ data Expr
   | App Expr Expr
   | If Expr Expr Expr
   | Let String Expr Expr
-  | Lambda String Type Expr
+  | Lambda String Type Type Expr
   | Record [(String, Expr)]
   | Prj String Expr
   | Pair Expr Expr

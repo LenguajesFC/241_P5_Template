@@ -99,7 +99,7 @@ E    : num                         { Int $1 }
      | '(' E E ')'                 { App $2 $3 }
      | if E then E else E          { If $2 $4 $6 }
      | let var '=' E in E end      { Let $2 $4 $6 }
-     | lam var ':' T '->' E        { Lambda $2 $4 $6 }
+     | lam '(' var ':' T ')' ':' T '->' E  { Lambda $3 $5 $8 $10 }
 
      | '('E ',' E')'               { Pair $2 $4 }
      | fst E                       { Fst $2 }
