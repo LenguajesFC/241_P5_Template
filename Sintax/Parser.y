@@ -65,10 +65,9 @@ import Data.Map
 %left '||'
 %left '&&'
 %nonassoc '==' '>' '<' '>=' '<='
-%left NEG
 %left '+' '-'
 %left '*' '/' '%'
-%left not fst snd pot sqrt
+%left not NEG fst snd pot sqrt
 %left '['
 
 %%
