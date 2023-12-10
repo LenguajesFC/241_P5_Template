@@ -20,6 +20,7 @@ data Expr
   | Inl Type Expr
   | Inr Type Expr
   | Case Expr String Expr String Expr
+  | Fix String Expr
   deriving (Show, Eq)
 
 data UnaryOp = Negate | Not | Pot | Sqrt deriving (Show, Eq)
